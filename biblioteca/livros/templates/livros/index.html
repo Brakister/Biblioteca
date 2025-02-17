@@ -1,0 +1,60 @@
+
+{% extends "livros/base.html" %}
+{% block title %}Biblioteca - Home{% endblock %}
+{% block content %}
+<h1>Catálogo de Livros</h1>
+
+<form method="get" action="{% url 'index' %}" class="mb-3">
+  <div class="input-group">
+    <input type="text" name="search" class="form-control" placeholder="Buscar por título..." value="{{ query }}">
+    <button class="btn btn-primary" type="submit">Buscar</button>
+  </div>
+</form>
+
+<div class="mb-3">
+  <strong>Filtrar por tag:</strong>
+  {% for tag in tags %}
+    <a href="{% url 'index' %}?tag={{ tag.name }}" class="btn btn-sm btn-outline-secondary">{{ tag.name }}</a>
+  {% endfor %}
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Título</th>
+      <th>Autor</th>
+      <th>Tags</th>
+      <th>Status</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for book in books %}
+    <tr>
+      <td>{{ book.title }}</td>
+      <td>{{ book.author }}</td>
+      <td>
+        {% for tag in book.tags.all %}
+          <span class="badge bg-secondary">{{ tag.name }}</span>
+        {% endfor %}
+      </td>
+      <td>
+        {% if book.available %}
+          Disponível
+        {% else %}
+          Emprestado
+        {% endif %}
+      </td>
+      <td>
+        {% if book.available %}
+          <a href="{% url 'borrow_book' book.id %}" class="btn btn-sm btn-primary">Emprestar</a>
+        {% endif %}
+        {% if user.is_staff %}
+          <a href="{% url 'edit_book' book.id %}" class="btn btn-sm btn-warning">Editar</a>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

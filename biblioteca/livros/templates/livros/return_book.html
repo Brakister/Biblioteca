@@ -1,0 +1,11 @@
+
+{% extends "livros/base.html" %}
+{% block title %}Registrar Devolução{% endblock %}
+{% block content %}
+<h2>Registrar Devolução para: {{ borrow.book.title }}</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-success">Registrar Devolução</button>
+</form>
+{% endblock %}

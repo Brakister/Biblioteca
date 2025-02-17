@@ -1,0 +1,37 @@
+{% extends "livros/base.html" %}
+{% block title %}Empréstimos{% endblock %}
+{% block content %}
+<h2>Empréstimos</h2>
+
+<form method="GET">
+    <input type="text" name="q" placeholder="Buscar livro..." class="form-control mb-3" value="{{ request.GET.q }}">
+    <button type="submit" class="btn btn-primary">Buscar</button>
+</form>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Título</th>
+      <th>Autor</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for livro in livros_disponiveis %}
+    <tr>
+      <td>{{ livro.id }}</td>
+      <td>{{ livro.title }}</td>
+      <td>{{ livro.author }}</td>
+      <td>
+        <a href="{% url 'emprestar_livro' livro.id %}" class="btn btn-sm btn-success">Emprestar</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="4">Nenhum livro disponível.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

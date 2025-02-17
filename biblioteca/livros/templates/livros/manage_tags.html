@@ -1,0 +1,18 @@
+
+{% extends "livros/base.html" %}
+{% block title %}Gerenciar Tags{% endblock %}
+{% block content %}
+<h2>Gerenciar Tags</h2>
+<form method="post" class="mb-3">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-primary">Adicionar Tag</button>
+</form>
+
+<h3>Tags Existentes</h3>
+<ul>
+  {% for tag in tags %}
+    <li>{{ tag.name }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}

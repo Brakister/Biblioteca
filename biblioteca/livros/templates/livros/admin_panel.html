@@ -1,0 +1,73 @@
+{% extends "livros/base.html" %}
+{% block title %}Painel Admin{% endblock %}
+{% block content %}
+<h2>Painel Administrativo</h2>
+
+<h3>Livros</h3>
+<a href="{% url 'emprestimo' %}" class="btn btn-primary mb-3">Ir para Empréstimos</a>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Título</th>
+      <th>Autor</th>
+      <th>Status</th>
+      <th>Tags</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for book in books %}
+    <tr>
+      <td>{{ book.id }}</td>
+      <td>{{ book.title }}</td>
+      <td>{{ book.author }}</td>
+      <td>{{ book.disponivel|yesno:"Disponível,Emprestado" }}</td>
+
+      <td>
+        {% for tag in book.tags.all %}
+          <span class="badge bg-secondary">{{ tag.name }}</span>
+        {% endfor %}
+      </td>
+      <td>
+        <a href="{% url 'edit_book' book.id %}" class="btn btn-sm btn-warning">Editar</a>
+        <!-- admin_panel.html -->
+
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h3>Empréstimos</h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Livro</th>
+      <th>Usuário</th>
+      <th>Data de Empréstimo</th>
+      <th>Data Expiração</th>
+      <th>Data de Devolução</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for borrow in borrows %}
+    <tr>
+      <td>{{ borrow.id }}</td>
+      <td>{{ borrow.book.title }}</td>
+      <td>{{ borrow.user.username }}</td>
+      <td>{{ borrow.borrowed_date|date:"Y-m-d H:i" }}</td>
+      <td>{{ borrow.expiration_date|date:"Y-m-d H:i" }}</td>
+      <td>{% if borrow.return_date %}{{ borrow.return_date|date:"Y-m-d H:i" }}{% else %}Pendente{% endif %}</td>
+      <td>
+        {% if not borrow.return_date %}
+          <a href="{% url 'return_book' borrow.id %}" class="btn btn-sm btn-success">Registrar Devolução</a>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

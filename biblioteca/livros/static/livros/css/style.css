@@ -1,0 +1,113 @@
+/* Estilo Geral */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar Moderna */
+.navbar {
+    background: linear-gradient(90deg, #007bff, #ff7e5f) !important;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.navbar-brand .text-primary {
+    color: #fff !important;
+}
+
+.navbar-brand .text-warning {
+    color: #ffc107 !important;
+}
+
+.nav-link {
+    color: #fff !important;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #ff7e5f !important;
+}
+
+.dropdown-menu {
+    background-color: #333;
+    border: none;
+}
+
+.dropdown-item {
+    color: #fff !important;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #007bff !important;
+}
+
+/* Hero Section */
+.hero-section {
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("{% static 'livros/images/library.jpg' %}") no-repeat center center/cover;
+    position: relative;
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+    animation: fadeInUp 1.5s ease-out;
+}
+
+.hero-section p {
+    font-size: 1.5rem;
+    animation: fadeInUp 2s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animações */
+.fadeIn {
+    animation: fadeIn 1s ease-in-out;
+}
+
+.slide-in-bottom {
+    animation: slideInBottom 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInBottom {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Footer */
+footer {
+    background: linear-gradient(90deg, #007bff, #ff7e5f);
+}
