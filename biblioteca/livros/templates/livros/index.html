@@ -1,23 +1,19 @@
-
 {% extends "livros/base.html" %}
 {% block title %}Biblioteca - Home{% endblock %}
 {% block content %}
 <h1>Catálogo de Livros</h1>
-
 <form method="get" action="{% url 'index' %}" class="mb-3">
   <div class="input-group">
     <input type="text" name="search" class="form-control" placeholder="Buscar por título..." value="{{ query }}">
     <button class="btn btn-primary" type="submit">Buscar</button>
   </div>
 </form>
-
 <div class="mb-3">
   <strong>Filtrar por tag:</strong>
   {% for tag in tags %}
     <a href="{% url 'index' %}?tag={{ tag.name }}" class="btn btn-sm btn-outline-secondary">{{ tag.name }}</a>
   {% endfor %}
 </div>
-
 <table class="table table-striped">
   <thead>
     <tr>
@@ -46,9 +42,11 @@
         {% endif %}
       </td>
       <td>
-        {% if book.available %}
+        <!-- Botão "Emprestar" visível apenas para administradores -->
+        {% if user.is_staff and book.available %}
           <a href="{% url 'borrow_book' book.id %}" class="btn btn-sm btn-primary">Emprestar</a>
         {% endif %}
+        <!-- Botão "Editar" visível apenas para administradores -->
         {% if user.is_staff %}
           <a href="{% url 'edit_book' book.id %}" class="btn btn-sm btn-warning">Editar</a>
         {% endif %}

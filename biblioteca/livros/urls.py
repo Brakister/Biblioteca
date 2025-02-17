@@ -1,7 +1,5 @@
 from django.urls import path
 from . import views
-from .views import emprestimo_view, emprestar_livro
-
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -14,7 +12,6 @@ urlpatterns = [
     path('return_book/<int:borrow_id>/', views.return_book, name='return_book'),
     path('manage_tags/', views.manage_tags, name='manage_tags'),
     path('backup/', views.backup, name='backup'),
-    path('emprestimo/', emprestimo_view, name='emprestimo'),
-    path('emprestar/<int:livro_id>/', emprestar_livro, name='emprestar_livro'),
-    
+    path('tags/delete/<int:tag_id>/', views.delete_tag, name='delete_tag'),
+    path('emprestimo/', views.emprestimo_view, name='emprestimo'),  
 ]

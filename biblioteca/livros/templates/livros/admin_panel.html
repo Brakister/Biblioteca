@@ -3,6 +3,7 @@
 {% block content %}
 <h2>Painel Administrativo</h2>
 
+<!-- Lista de Livros -->
 <h3>Livros</h3>
 <a href="{% url 'emprestimo' %}" class="btn btn-primary mb-3">Ir para Empréstimos</a>
 <table class="table table-bordered">
@@ -22,8 +23,7 @@
       <td>{{ book.id }}</td>
       <td>{{ book.title }}</td>
       <td>{{ book.author }}</td>
-      <td>{{ book.disponivel|yesno:"Disponível,Emprestado" }}</td>
-
+      <td>{{ book.available|yesno:"Disponível,Emprestado" }}</td>
       <td>
         {% for tag in book.tags.all %}
           <span class="badge bg-secondary">{{ tag.name }}</span>
@@ -31,15 +31,15 @@
       </td>
       <td>
         <a href="{% url 'edit_book' book.id %}" class="btn btn-sm btn-warning">Editar</a>
-        <!-- admin_panel.html -->
-
       </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
 
+<!-- Lista de Empréstimos -->
 <h3>Empréstimos</h3>
+{% if borrows %}
 <table class="table table-bordered">
   <thead>
     <tr>
@@ -70,4 +70,7 @@
     {% endfor %}
   </tbody>
 </table>
+{% else %}
+<p>Nenhum empréstimo registrado.</p>
+{% endif %}
 {% endblock %}

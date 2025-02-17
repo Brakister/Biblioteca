@@ -1,18 +1,26 @@
-
 {% extends "livros/base.html" %}
 {% block title %}Gerenciar Tags{% endblock %}
 {% block content %}
 <h2>Gerenciar Tags</h2>
+
+<!-- Formulário para adicionar novas tags -->
 <form method="post" class="mb-3">
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit" class="btn btn-primary">Adicionar Tag</button>
 </form>
 
+<!-- Lista de tags existentes -->
 <h3>Tags Existentes</h3>
 <ul>
   {% for tag in tags %}
-    <li>{{ tag.name }}</li>
+    <li>
+      {{ tag.name }}
+      <!-- Botão para excluir a tag -->
+      <a href="{% url 'delete_tag' tag.id %}" class="btn btn-danger btn-sm">Excluir</a>
+    </li>
+  {% empty %}
+    <li>Nenhuma tag cadastrada.</li>
   {% endfor %}
 </ul>
 {% endblock %}

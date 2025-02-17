@@ -6,13 +6,7 @@ from django.conf import settings
 import os, shutil
 from .models import Book, Tag, Borrow
 from .forms import BookForm, BorrowForm, ReturnForm, TagForm
-from django.shortcuts import render, redirect
-from .models import Emprestimo, Livro
-from .forms import EmprestimoForm
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import Livro, Emprestimo
 from django.utils import timezone
-from django.contrib.auth.models import User
 
 # Função para verificar se o usuário é administrador (staff)
 def is_admin(user):
@@ -56,7 +50,7 @@ def user_logout(request):
 @user_passes_test(is_admin)
 def admin_panel(request):
     books = Book.objects.all()
-    borrows = Borrow.objects.all()
+    borrows = Borrow.objects.all()  # Certifique-se de que esta consulta está funcionando
     tags = Tag.objects.all()
     return render(request, 'livros/admin_panel.html', {
         'books': books,
@@ -104,7 +98,7 @@ def borrow_book(request, book_id):
             borrow.book = book
             borrow.user = request.user
             borrow.save()
-            book.available = False
+            book.available = False  # Marca o livro como indisponível
             book.save()
             messages.success(request, 'Livro emprestado com sucesso!')
             return redirect('index')
@@ -119,8 +113,10 @@ def return_book(request, borrow_id):
     if request.method == 'POST':
         form = ReturnForm(request.POST, instance=borrow)
         if form.is_valid():
-            borrow = form.save()
-            borrow.book.available = True
+            borrow = form.save(commit=False)
+            borrow.return_date = timezone.now()
+            borrow.save()
+            borrow.book.available = True  # Marca o livro como disponível novamente
             borrow.book.save()
             messages.success(request, 'Livro marcado como devolvido.')
             return redirect('admin_panel')
@@ -144,6 +140,16 @@ def manage_tags(request):
 
 @login_required
 @user_passes_test(is_admin)
+def delete_tag(request, tag_id):
+    tag = get_object_or_404(Tag, pk=tag_id)
+    if request.method == 'POST':
+        tag.delete()
+        messages.success(request, f'Tag "{tag.name}" excluída com sucesso!')
+        return redirect('manage_tags')
+    return render(request, 'livros/delete_tag_confirm.html', {'tag': tag})
+
+@login_required
+@user_passes_test(is_admin)
 def backup(request):
     backup_dir = os.path.join(settings.BASE_DIR, 'backup')
     if not os.path.exists(backup_dir):
@@ -160,25 +166,10 @@ def backup(request):
         messages.error(request, f'Erro ao fazer backup: {str(e)}')
     return redirect('admin_panel')
 
-
-
-
+@login_required
 def emprestimo_view(request):
     query = request.GET.get('q', '')
-    livros_disponiveis = Livro.objects.filter(disponivel=True, titulo__icontains=query)
-    return render(request, 'livros/emprestimo.html', {'livros_disponiveis': livros_disponiveis})
-
-
-def emprestar_livro(request, livro_id):
-    livro = get_object_or_404(Livro, id=livro_id)
-
-    if livro.available:
-        livro.available = False  # Marcar como emprestado
-        livro.save()
-        Emprestimo.objects.create(
-            book=livro,
-            user=request.user,
-            borrowed_date=timezone.now(),
-            expiration_date=timezone.now() + timezone.timedelta(days=14)  # Definir prazo de 14 dias
-        )
-    return redirect('emprestimo')
+    books = Book.objects.filter(available=True)
+    if query:
+        books = books.filter(title__icontains=query)
+    return render(request, 'livros/emprestimo.html', {'books': books, 'query': query})

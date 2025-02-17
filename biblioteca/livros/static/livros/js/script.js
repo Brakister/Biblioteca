@@ -1,16 +1,17 @@
-// Adiciona animação ao scroll
-document.addEventListener("DOMContentLoaded", function () {
-    const sections = document.querySelectorAll(".fadeIn");
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add("visible");
-                }
-            });
-        },
-        { threshold: 0.2 }
-    );
+// script.js
 
-    sections.forEach((section) => observer.observe(section));
-});
+// Função para animar elementos ao rolar a página
+document.addEventListener("DOMContentLoaded", function () {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    });
+  
+    // Observar todos os elementos com a classe "animate-on-scroll"
+    document.querySelectorAll(".animate-on-scroll").forEach((el) => {
+      observer.observe(el);
+    });
+  });

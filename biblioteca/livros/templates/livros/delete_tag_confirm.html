@@ -1,0 +1,12 @@
+{% extends "livros/base.html" %}
+{% block title %}Confirmar Exclusão{% endblock %}
+{% block content %}
+<h2>Confirmar Exclusão</h2>
+<p>Você tem certeza que deseja excluir a tag "{{ tag.name }}"?</p>
+
+<form method="post">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-danger">Excluir</button>
+  <a href="{% url 'manage_tags' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}
